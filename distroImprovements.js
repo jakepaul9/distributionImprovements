@@ -1,4 +1,5 @@
 let inStr = ''
+let aliases = [{old: "NSM2-US", new: "NSM2(US)"},{old: "NSM5-US", new: "NSM5(US)"}];
 let palNum = document.getElementById('palletNumber')
 if (palNum) {
   palNum.focus();
@@ -102,6 +103,13 @@ document.addEventListener('keydown', e => {
       } else {
         // e.preventDefault()
       }
+      for(alias of aliases){
+        if (e.target.value.toUpperCase().includes(alias.old)){
+            e.target.value = alias.new
+          break;
+        }
+      }
+      
     }
     inStr = '';
   }
