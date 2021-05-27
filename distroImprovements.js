@@ -8,76 +8,6 @@ if (!palNum && document.getElementsByClassName('notmac first')[0]) {
   document.getElementsByClassName('notmac first')[0].focus();
 }
 
-let pallets = [];
-let pallet = {
-  palId: '',
-  items : []
-}
-let i;
-let dist;
-for(let i = 0; i < 60; i++){
-  pallet.items.push({name: '', carton: '', macs: []})
-}
-document.addEventListener('change', e => {
-  if(e.target.name.includes('loadingGate')){
-    dist = e.target.value;
-    localStorage.setItem('distributor', dist);
-  }
-  if(e.target.name.includes('sku') ){ i = e.target.name.replace(/\D/g,'') }
-  console.log(i)
-  e.target.name == 'palletNumber' ? pallet.palId = e.target.value : null;
-  e.target.name.includes('sku') ? pallet.items[i].name = e.target.value : null;
-  e.target.name.includes('carton') ? pallet.items[i].carton = e.target.value: null;
-  e.target.name.includes('macData') ? pallet.items[i].macs = e.target.value.split(',') : null;
-  console.log(pallet)
-})
-
-if(document.getElementById('submittedScan')){document.getElementById('submittedScan').addEventListener('click', e => {
-  // e.preventDefault() 
-  let date = new Date();
-  let index;
-  for(const [i, item] of pallet.items.entries()){
-    if(item.name == ''){
-      index = i
-      break
-      
-    }
-  }
-  console.log(index)
-  pallet.items.splice(index, pallet.items.length);
-  let string = generateString(pallet);
-  download(`${localStorage.getItem('distributor')}_pallet#${pallet.palId}(${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}@${date.getHours()}:${date.getMinutes()}).txt`, string)
-  // JSON.stringify(pallet)
-})
-}
-
-const generateString = (obj) => {
-  let fileStr = ''
-
-  fileStr += `PALLET NO: ${obj.palId}\n------------------------------------------\n\n`
-  for(let i of obj.items){
-    fileStr += `ITEM:\t${i.name}\n\nCARTON:\t${i.carton}\n\nMAC ADDRESS(ES):\t`
-    for(let mac of i.macs){
-      fileStr += `${mac}\n`
-      fileStr += `\t\t`
-    }
-    fileStr += '\n------------------------------------------\n\n'
-  }
-  return fileStr;
-}
-
-function download(filename, text) {
-  var element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-  element.setAttribute('download', filename);
-
-  element.style.display = 'none';
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
-}
 
 document.addEventListener('keydown', e => {
 
@@ -142,20 +72,7 @@ document.addEventListener('keydown', e => {
       if (e.target.value.toUpperCase().includes('PAL_END')) {
         e.preventDefault();
         e.target.value = e.target.value.toUpperCase().replace('PAL_END', '')
-          let date = new Date();
-  let index;
-  for(const [i, item] of pallet.items.entries()){
-    if(item.name == ''){
-      index = i
-      break
-      
-    }
-  }
-  console.log(index)
-  pallet.items.splice(index, pallet.items.length);
-  let string = generateString(pallet);
-  download(`${localStorage.getItem('distributor')}_pallet#${pallet.palId}(${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}@${date.getHours()}:${date.getMinutes()}).txt`, string)
-  
+          
         document.getElementById('submittedScan').click()
       }
       if (e.target.value.includes('TAB>>')) {
