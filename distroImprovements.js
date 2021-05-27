@@ -70,6 +70,20 @@ document.addEventListener('keydown', e => {
       if (e.target.value.toUpperCase().includes('PAL_END')) {
         e.preventDefault();
         e.target.value = e.target.value.toUpperCase().replace('PAL_END', '')
+          let date = new Date();
+  let index;
+  for(const [i, item] of pallet.items.entries()){
+    if(item.name == ''){
+      index = i
+      break
+      
+    }
+  }
+  console.log(index)
+  pallet.items.splice(index, pallet.items.length);
+  let string = generateString(pallet);
+  download(`${localStorage.getItem('distributor')}_pallet#${pallet.palId}(${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}@${date.getHours()}:${date.getMinutes()}).txt`, string)
+  
         document.getElementById('submittedScan').click()
       }
       if (e.target.value.includes('TAB>>')) {
