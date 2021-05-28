@@ -72,8 +72,8 @@ document.addEventListener('keydown', e => {
       if (e.target.value.toUpperCase().includes('PAL_END')) {
         e.preventDefault();
         e.target.value = e.target.value.toUpperCase().replace('PAL_END', '')
-          let check = submitData();
-        check ? document.getElementById('submittedScan').click() : null
+        submitData(e);
+        document.getElementById('submittedScan').click() : null
       }
       if (e.target.value.includes('TAB>>')) {
 
